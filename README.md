@@ -1,8 +1,20 @@
 # dep-auditor
 
+[![MCPize](https://mcpize.com/badge/@directlytoomar/dep-auditor)](https://mcpize.com/mcp/dep-auditor)
+
 Package Security & License Auditor MCP Server.
 
 Check package licenses, known vulnerabilities, and metadata across **npm**, **PyPI**, and **Cargo** ecosystems — all from your AI agent.
+
+## Connect via MCPize
+
+Use this MCP server instantly with no local installation:
+
+```bash
+npx -y mcpize connect @directlytoomar/dep-auditor --client claude
+```
+
+Or connect at: **https://mcpize.com/mcp/dep-auditor**
 
 ## Tools
 
