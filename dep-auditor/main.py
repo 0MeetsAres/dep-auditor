@@ -219,11 +219,70 @@ async def handle_call_tool(name: str, arguments: dict) -> list[TextContent]:
 
 # --- Entrypoint ---
 
-async def main():
-    async with server.run() as running:
-        await running.wait_closed()
+def create_initialization_options() -> InitializationOptions:
+    return InitializationOptions(
+        server_name="dep-auditor",
+        server_version="1.0.0",
+        capabilities=server.get_capabilities(
+            notification_options=NotificationOptions(
+                prompts_changed=False,
+                resources_changed=False,
+                tools_changed=False,
+            ),
+            experimental_capabilities={},
+        ),
+    )
+
+
+async def run_stdio():
+    """Run via stdio transport (local development)."""
+    from mcp.server.stdio import stdio_server
+    async with stdio_server() as (read_stream, write_stream):
+        await server.run(
+            read_stream,
+            write_stream,
+            create_initialization_options(),
+        )
+
+
+async def run_http(host: str = "0.0.0.0", port: int = 8080):
+    """Run via SSE/HTTP transport (Apify / remote deployment)."""
+    from mcp.server.sse import SseServerTransport
+    from starlette.applications import Starlette
+    from starlette.routing import Route, Mount
+    from starlette.responses import Response
+    import uvicorn
+
+    sse = SseServerTransport("/messages/")
+
+    async def handle_sse(request):
+        async with sse.connect_sse(
+            request.scope, request.receive, request._send
+        ) as streams:
+            await server.run(
+                streams[0], streams[1], create_initialization_options()
+            )
+        return Response()
+
+    routes = [
+        Route("/sse", endpoint=handle_sse, methods=["GET"]),
+        Mount("/messages/", app=sse.handle_post_message),
+    ]
+
+    app = Starlette(routes=routes)
+    uvicorn.run(app, host=host, port=port, log_level="info")
 
 
 if __name__ == "__main__":
-    import asyncio
-    asyncio.run(main())
+    import os, sys
+
+    port = os.environ.get("APIFY_PORT")
+    if port:
+        run_http(port=int(port))
+    elif "--http" in sys.argv:
+        idx = sys.argv.index("--http")
+        port_arg = int(sys.argv[idx + 1]) if idx + 1 < len(sys.argv) else 8080
+        run_http(port=port_arg)
+    else:
+        import anyio
+        anyio.run(run_stdio)

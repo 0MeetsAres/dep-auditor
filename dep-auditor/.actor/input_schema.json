@@ -1,0 +1,32 @@
+{
+  "title": "dep-auditor Configuration",
+  "description": "Configure the package you want to audit. No API keys required.",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "ecosystem": {
+      "title": "Ecosystem",
+      "type": "string",
+      "description": "Package ecosystem",
+      "enum": ["npm", "pypi", "cargo"],
+      "default": "npm",
+      "editor": "select"
+    },
+    "package": {
+      "title": "Package Name",
+      "type": "string",
+      "description": "Name of the package to audit (e.g. express, requests, serde)",
+      "default": "express",
+      "editor": "textfield"
+    },
+    "action": {
+      "title": "Action",
+      "type": "string",
+      "description": "What to check",
+      "enum": ["check_package", "audit_vulns"],
+      "default": "check_package",
+      "editor": "select"
+    }
+  },
+  "required": ["ecosystem", "package"]
+}

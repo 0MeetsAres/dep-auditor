@@ -1,0 +1,13 @@
+{
+  "actorSpecification": 1,
+  "name": "dep-auditor",
+  "title": "Package Security & License Auditor",
+  "description": "Check package licenses, known vulnerabilities, and metadata across npm, PyPI, and Cargo. Available as an MCP server for AI agents.",
+  "version": "1.0.0",
+  "buildTag": "latest",
+  "dockerFile": "../Dockerfile",
+  "input": "./input_schema.json",
+  "readme": "../README.md",
+  "categories": ["MCP servers", "Developer tools"],
+  "mount": "/"
+}
