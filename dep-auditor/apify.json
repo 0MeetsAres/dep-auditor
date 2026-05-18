@@ -1,0 +1,24 @@
+{
+  "name": "dep-auditor",
+  "version": "1.0.0",
+  "description": "Package Security & License Auditor MCP Server. Check licenses, known vulnerabilities, and metadata across npm, PyPI, and Cargo.",
+  "categories": ["MCP servers", "Developer tools", "Automation"],
+  "pricingModel": "PAY_PER_EVENT",
+  "pricing": {
+    "events": [
+      {
+        "name": "check-package",
+        "priceUsd": 0.01,
+        "description": "Check package license, version, and metadata"
+      },
+      {
+        "name": "audit-vulns",
+        "priceUsd": 0.02,
+        "description": "Run security vulnerability audit via OSV.dev"
+      }
+    ]
+  },
+  "dockerFile": "Dockerfile",
+  "secrets": {},
+  "buildTag": "latest"
+}
