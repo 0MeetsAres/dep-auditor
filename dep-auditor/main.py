@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 dep-auditor: Package Security & License Auditor MCP Server
 
@@ -274,15 +275,5 @@ async def run_http(host: str = "0.0.0.0", port: int = 8080):
 
 
 if __name__ == "__main__":
-    import os, sys
-
-    port = os.environ.get("APIFY_PORT")
-    if port:
-        run_http(port=int(port))
-    elif "--http" in sys.argv:
-        idx = sys.argv.index("--http")
-        port_arg = int(sys.argv[idx + 1]) if idx + 1 < len(sys.argv) else 8080
-        run_http(port=port_arg)
-    else:
-        import anyio
-        anyio.run(run_stdio)
+    import anyio
+    anyio.run(run_stdio)

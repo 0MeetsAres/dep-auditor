@@ -7,8 +7,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY main.py .
 
-ENV APIFY_PORT=8080
-
 EXPOSE 8080
 
-CMD ["python", "main.py"]
+CMD ["python", "-c", "from main import run_http; run_http(port=8080)"]
